@@ -1,7 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <glm/glm.hpp>
 
+#include "world/Voxel.h"
 #include "Shader.h"
 
 const unsigned int SCREEN_WIDTH = 800;
@@ -12,13 +14,6 @@ void processInput(GLFWwindow *window)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 }
-
-float vertices[] = 
-{
-    0.0f, 0.5f, 0.0f,
-    -0.5f, 0.0f, 0.0f,
-    0.5f, 0.0f, 0.0f
-};
 
 int main(int argc, char **argv)
 {
@@ -48,31 +43,31 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-    GLuint VBO;
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); 
-
-    GLuint VAO;
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
     Shader shader("src/shader/vshader.glsl", "src/shader/fshader.glsl");
     shader.use();
     
+    Voxel voxel1(glm::vec3(0.0f, 0.0f, 0.0f));
+    Voxel voxel2(glm::vec3(1.0f, 0.0f, 0.0f));
+    Voxel voxel3(glm::vec3(-1.0f, 0.0f, 0.0f));
+
+
+    glm::mat4 projection = glm::perspective()
+
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
 		
         glClear(GL_COLOR_BUFFER_BIT);
 
+        voxel1.draw(shader);
+        voxel2.draw(shader);
+        voxel3.draw(shader);
+
         glDrawArrays(GL_TRIANGLES, 0, 3);
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-
+    
 	glfwTerminate();
 	return 0;
 }
