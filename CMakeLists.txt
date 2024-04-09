@@ -20,7 +20,7 @@ include_directories(
         ${GLFW_INCLUDE_DIRS}
 ) 
 
-set(SOURCE_FILES src/main.cpp src/glad.c src/Shader.cpp src/world/Voxel.cpp)
+set(SOURCE_FILES src/main.cpp src/glad.c src/Shader.cpp src/world/Voxel.cpp src/Camera.cpp)
 
 add_executable(main ${SOURCE_FILES})
 
