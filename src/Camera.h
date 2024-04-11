@@ -7,13 +7,10 @@
 class Camera {
 public:
     ~Camera();
+    static Camera* getInstance();
+    void operator=(const Camera &) = delete;
 
     void draw(Shader& shader);
-    void translate(glm::vec3 position);
-
-    static Camera* getInstance();
-
-    void operator=(const Camera &) = delete;
 
     glm::vec3 position;
     glm::vec3 direction;
@@ -21,9 +18,9 @@ public:
 
 protected:
     Camera();
-
     static Camera* instance;
 
+    float sensitivity = 0.9f;
 private:
     glm::mat4 projection;
 };

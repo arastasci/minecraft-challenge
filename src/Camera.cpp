@@ -13,10 +13,6 @@ Camera::Camera()
     up = glm::vec3(0.0f, 1.0f, 0.0f);
 }
 
-Camera::~Camera()
-{
-}
-
 void Camera::draw(Shader& shader)
 {
     glm::mat4 view = glm::lookAt(position, position + direction, up);
@@ -24,11 +20,6 @@ void Camera::draw(Shader& shader)
 
     shader.setMat4("view", view);
     shader.setMat4("projection", projection);
-}
-
-void Camera::translate(glm::vec3 position)
-{
-    this->position += position;
 }
 
 Camera* Camera::getInstance(){
