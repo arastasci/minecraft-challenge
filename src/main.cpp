@@ -4,11 +4,11 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "world/Voxel.h"
 #include "Shader.h"
 #include "Camera.h"
 #include <stb_image.h>
 #include <filesystem>
+#include "world/Block.h"
 
 const unsigned int SCREEN_WIDTH = 800;
 const unsigned int SCREEN_HEIGHT = 600;
@@ -112,44 +112,23 @@ int main(int argc, char **argv)
     Shader shader("src/shader/vshader.glsl", "src/shader/fshader.glsl");
     shader.use();
     
-    Voxel voxel1(glm::vec3(0.0f, 0.0f, 0.0f));
-    Voxel voxel2(glm::vec3(1.0f, 0.0f, 0.0f));
-    Voxel voxel3(glm::vec3(-1.0f, 0.0f, 0.0f));
-    Voxel voxel4(glm::vec3(0.0f, 1.0f, 0.0f));
-
+    Block voxel1(glm::vec3(0.0f, 0.0f, 0.0f));
+    Block voxel2(glm::vec3(1.0f, 0.0f, 0.0f));
+    Block voxel3(glm::vec3(-1.0f, 0.0f, 0.0f));
+    Block voxel4(glm::vec3(0.0f, 1.0f, 0.0f));
+                           
     Camera *camera = Camera::getInstance();
     
-    GLuint texture0;
-    /*
-    glGenTextures(1, &texture0);
-    glBindTexture(GL_TEXTURE_2D, texture0);
-    // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
     
-    unsigned char *data = stbi_load("res/textures/grass.jpg", &width, &height, &nrChannels, 0); 
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
-    */
+    
+    glEnable(GL_DEPTH_TEST);
+
+
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
 		
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.1f, 0.1f, 0.7f, 1.0f);
 
         voxel1.draw(shader);
@@ -159,7 +138,6 @@ int main(int argc, char **argv)
 
         camera->draw(shader);
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

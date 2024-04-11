@@ -6,17 +6,18 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "../Shader.h"
-
-class Voxel {
+#include "texture/Texture.h"
+class Block {
 public:
     
-    Voxel() = default;
-    ~Voxel() = default;
-    Voxel(glm::vec3 position);
+    Block() = default;
+    ~Block() = default;
+    Block(glm::vec3 position);
     
     void draw(Shader& shader);
 
 private:
-    GLuint VAO, VBO;
+    GLuint VAO, VBO, EBO;
+    Texture texture;
     glm::mat4 model;    
 };

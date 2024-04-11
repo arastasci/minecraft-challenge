@@ -1,4 +1,4 @@
-#include <GLFW3/glfw3.h>
+#include <GLFW/glfw3.h>
 class Application
 {
 public:
