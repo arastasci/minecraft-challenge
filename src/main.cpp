@@ -8,7 +8,7 @@
 #include "Camera.h"
 #include <stb_image.h>
 #include <filesystem>
-#include "world/Block.h"
+#include "world/Chunk.h"
 
 const unsigned int SCREEN_WIDTH = 800;
 const unsigned int SCREEN_HEIGHT = 600;
@@ -82,6 +82,7 @@ void processInput(GLFWwindow *window)
 
 int main(int argc, char **argv)
 {
+
     glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -112,17 +113,12 @@ int main(int argc, char **argv)
     Shader shader("src/shader/vshader.glsl", "src/shader/fshader.glsl");
     shader.use();
     
-    Block voxel1(glm::vec3(0.0f, 0.0f, 0.0f));
-    Block voxel2(glm::vec3(1.0f, 0.0f, 0.0f));
-    Block voxel3(glm::vec3(-1.0f, 0.0f, 0.0f));
-    Block voxel4(glm::vec3(0.0f, 1.0f, 0.0f));
-                           
-    Camera *camera = Camera::getInstance();
-    
-    
-    
-    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
 
+    Camera *camera = Camera::getInstance();
+    Chunk chunk;
+
+    glEnable(GL_DEPTH_TEST);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -131,11 +127,7 @@ int main(int argc, char **argv)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.1f, 0.1f, 0.7f, 1.0f);
 
-        voxel1.draw(shader);
-        voxel2.draw(shader);
-        voxel3.draw(shader);
-        voxel4.draw(shader);
-
+        chunk.draw(shader);
         camera->draw(shader);
 
 		glfwSwapBuffers(window);
