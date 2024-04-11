@@ -10,15 +10,8 @@
 
 class Block {
 public:
-    
-    ~Block() = default;
-    Block(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f));
-    
-    void setPosition(glm::vec3 position);
-    void draw(Shader& shader);
+    glm::vec3 position;
 
-private:
-    GLuint VAO, VBO, EBO;
-    Texture texture;
-    glm::mat4 model;    
+    Block(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f));
+    ~Block() = default;
 };

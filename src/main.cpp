@@ -114,20 +114,27 @@ int main(int argc, char **argv)
     shader.use();
     
     glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
 
     Camera *camera = Camera::getInstance();
+    
     Chunk chunk;
-
-    glEnable(GL_DEPTH_TEST);
+    Chunk chunk2(glm::vec3(-16.0f, 0.0f, 0.0f));
+    Chunk chunk3(glm::vec3(0.0f, 0.0f, 16.0f));
+    Chunk chunk4(glm::vec3(-16.0f, 0.0f, 16.0f));
 
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
 		
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(0.1f, 0.1f, 0.7f, 1.0f);
+        glClearColor(0.69f, 0.92f, 0.92f, 1.0f);
 
         chunk.draw(shader);
+        chunk2.draw(shader);
+        chunk3.draw(shader);
+        chunk4.draw(shader);
+
         camera->draw(shader);
 
 		glfwSwapBuffers(window);

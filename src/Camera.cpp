@@ -8,7 +8,7 @@ Camera::Camera()
 {
     projection = glm::perspective(glm::radians(45.0f), 800.0f/600.0f, 0.1f, 100.f);
 
-    position = glm::vec3(0.0f, 0.0f, 3.0f);
+    position = glm::vec3(0.0f, 10.0f, 3.0f);
     direction = glm::vec3(0.0f, 0.0f, -1.0f);
     up = glm::vec3(0.0f, 1.0f, 0.0f);
 }
