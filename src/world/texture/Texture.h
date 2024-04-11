@@ -1,27 +1,24 @@
 #pragma once
-#include "TextureGenerator.h"
+#include "TextureAtlas.h"
+#include "../BlockData.h"
 
 struct Texture
 {
-	Texture(const char* path, bool flip = false)
+	Texture() = default;
+	Texture(BlockData data)
 	{
-		textureId = TextureGenerator::generateTexture(path, flip);
-	}
-	Texture(GLuint textureId)
-	{
-		this->textureId = textureId;
-	}
-	void bindTexture()
-	{
-		glBindTexture(GL_TEXTURE_2D, textureId);
-	}
-	void unbindTexture()
-	{
-		glBindTexture(GL_TEXTURE_2D, 0);
+		texHeight = 1.0f / 16.0f;
+		texWidth = 1.0f / 16.0f;
+		topTexCoords = TextureAtlas::getInstance()->getTextureCoords(data.TopTextureIndices);
+		bottomTexCoords = TextureAtlas::getInstance()->getTextureCoords(data.BottomTextureIndices);
+		sideTexCoords = TextureAtlas::getInstance()->getTextureCoords(data.SideTextureIndices);
+		
 	}
 
-private:
-	GLuint textureId;
+	glm::vec2 topTexCoords;
+	glm::vec2 bottomTexCoords;
+	glm::vec2 sideTexCoords;
+	float texWidth, texHeight;
 
 
 };

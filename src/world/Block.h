@@ -7,17 +7,19 @@
 
 #include "../Shader.h"
 #include "texture/Texture.h"
+#include <vector>
 class Block {
 public:
     
     Block() = default;
     ~Block() = default;
-    Block(glm::vec3 position);
+    Block(glm::vec3 position, BlockData* data);
     
     void draw(Shader& shader);
 
 private:
-    GLuint VAO, VBO, EBO;
+    GLuint VAO, VBO, EBO, VBO_tex;
     Texture texture;
+    std::vector<float> texCoords;
     glm::mat4 model;    
 };
