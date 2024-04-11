@@ -9,6 +9,7 @@
 #include <stb_image.h>
 #include <filesystem>
 #include "world/Block.h"
+#include "world/BlockDatabase.h"
 
 const unsigned int SCREEN_WIDTH = 800;
 const unsigned int SCREEN_HEIGHT = 600;
@@ -112,10 +113,15 @@ int main(int argc, char **argv)
     Shader shader("src/shader/vshader.glsl", "src/shader/fshader.glsl");
     shader.use();
     
-    Block voxel1(glm::vec3(0.0f, 0.0f, 0.0f));
-    Block voxel2(glm::vec3(1.0f, 0.0f, 0.0f));
-    Block voxel3(glm::vec3(-1.0f, 0.0f, 0.0f));
-    Block voxel4(glm::vec3(0.0f, 1.0f, 0.0f));
+    BlockDatabase db;
+    
+    TextureAtlas::getInstance()->generateTexture("res/textures/terrain.png");
+    
+
+    Block voxel1(glm::vec3(0.0f, 0.0f, 0.0f), db.blockDatabase[(int)BlockId::Grass]);
+    Block voxel2(glm::vec3(1.0f, 0.0f, 0.0f), db.blockDatabase[(int)BlockId::Grass]);
+    Block voxel3(glm::vec3(-1.0f, 0.0f, 0.0f), db.blockDatabase[(int)BlockId::Grass]);
+    Block voxel4(glm::vec3(0.0f, 1.0f, 0.0f), db.blockDatabase[(int)BlockId::Grass]);
                            
     Camera *camera = Camera::getInstance();
     
