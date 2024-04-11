@@ -10,9 +10,8 @@
 class Block {
 public:
     
-    Block() = default;
     ~Block() = default;
-    Block(glm::vec3 position);
+    Block(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f));
     
     void draw(Shader& shader);
 
