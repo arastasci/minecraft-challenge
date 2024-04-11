@@ -118,14 +118,10 @@ int main(int argc, char **argv)
     TextureAtlas::getInstance()->generateTexture("res/textures/terrain.png");
     
 
-    Block voxel1(glm::vec3(0.0f, 0.0f, 0.0f), db.blockDatabase[(int)BlockId::Grass]);
-    Block voxel2(glm::vec3(1.0f, 0.0f, 0.0f), db.blockDatabase[(int)BlockId::Grass]);
-    Block voxel3(glm::vec3(-1.0f, 0.0f, 0.0f), db.blockDatabase[(int)BlockId::Grass]);
-    Block voxel4(glm::vec3(0.0f, 1.0f, 0.0f), db.blockDatabase[(int)BlockId::Grass]);
+    Block voxel1(db.blockDatabase[(int)BlockId::Grass], glm::vec3(0.0f, 0.0f, 0.0f));
+
                            
     Camera *camera = Camera::getInstance();
-    
-    
     
     glEnable(GL_DEPTH_TEST);
 
@@ -138,9 +134,6 @@ int main(int argc, char **argv)
         glClearColor(0.1f, 0.1f, 0.7f, 1.0f);
 
         voxel1.draw(shader);
-        voxel2.draw(shader);
-        voxel3.draw(shader);
-        voxel4.draw(shader);
 
         camera->draw(shader);
 

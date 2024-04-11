@@ -72,9 +72,7 @@ unsigned int indices[] = {
     5, 4, 0
 };
 
-Block::Block(glm::vec3 position, BlockData* data) {
-    
-    
+Block::Block(BlockData* data, glm::vec3 position) {
     // Initialize the voxel with the given position
     
     model = glm::mat4(1.0f);
