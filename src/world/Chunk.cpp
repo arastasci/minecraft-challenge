@@ -1,47 +1,59 @@
 #include "Chunk.h"
 
-float vertices_[] = {
-    0.5f, 0.5f, -0.5f,
+
+float back_vertices[] = 
+{
+        0.5f, 0.5f, -0.5f,
     -0.5f, 0.5f, -0.5f,
     -0.5f, -0.5f, -0.5f,
     -0.5f, -0.5f, -0.5f,
     0.5f, -0.5f, -0.5f,
     0.5f, 0.5f, -0.5f,
+};
 
-
-    // Front
-    -0.5f, 0.5f, 0.5f,
+float front_vertices[] =
+{
+        -0.5f, 0.5f, 0.5f,
     0.5f, 0.5f, 0.5f,
     0.5f, -0.5f, 0.5f,
     0.5f, -0.5f, 0.5f,
     -0.5f, -0.5f, 0.5f,
-    -0.5f, 0.5f, 0.5f,
+    -0.5f, 0.5f, 0.5f
+};
 
-    // Left
-    -0.5f, 0.5f, -0.5f,
-    -0.5f, 0.5f, 0.5f,
-    -0.5f, -0.5f, 0.5f,
-    -0.5f, -0.5f, 0.5f,
-    -0.5f, -0.5f, -0.5f,
-    -0.5f, 0.5f, -0.5f,
+float left_vertices[] =
+{
+		-0.5f, 0.5f, -0.5f,
+	-0.5f, 0.5f, 0.5f,
+	-0.5f, -0.5f, 0.5f,
+	-0.5f, -0.5f, 0.5f,
+	-0.5f, -0.5f, -0.5f,
+	-0.5f, 0.5f, -0.5f,
+};
 
-    // Right
+float right_vertices[] =
+{
     0.5f, 0.5f, 0.5f,
     0.5f, 0.5f, -0.5f,
     0.5f, -0.5f, -0.5f,
     0.5f, -0.5f, -0.5f,
     0.5f, -0.5f, 0.5f,
     0.5f, 0.5f, 0.5f,
+};
 
-    // Bottom
-    0.5f, -0.5f, -0.5f,
+float bottom_vertices[]
+=
+{
+     0.5f, -0.5f, -0.5f,
     -0.5f, -0.5f, -0.5f,
     -0.5f, -0.5f, 0.5f,
     -0.5f, -0.5f, 0.5f,
     0.5f, -0.5f, 0.5f,
     0.5f, -0.5f, -0.5f,
+};
 
-
+float top_vertices[] =
+{
     0.5f, 0.5f, 0.5f,
     0.5f, 0.5f, -0.5f,
     -0.5f, 0.5f, -0.5f,
@@ -50,8 +62,10 @@ float vertices_[] = {
     0.5f, 0.5f, 0.5f
 };
 
+
 Chunk::Chunk(glm::vec3 position) : position(position)
 {
+
     BlockDatabase db;
     BlockData *data = db.blockDatabase[1];
 
@@ -61,21 +75,33 @@ Chunk::Chunk(glm::vec3 position) : position(position)
         {
             for (int k = 0; k < CHUNK_SIZE; k++)
             {
-                for (int l = 0; l < 108; l++)
+                if (i == 0)
                 {
-                    float shift = 0;
-
-                    if (l % 3 == 0)
-                        shift = i + position.x;
-                    else if (l % 3 == 1)
-                        shift = j + position.y;
-                    else if (l % 3 == 2)
-                        shift = k + position.z;
-
-                    vertices.push_back(vertices_[l] + shift);
+                    addLeftFace(i, j, k, position, data);
                 }
+                if (i == CHUNK_SIZE - 1)
+				{
+					addRightFace(i, j, k, position, data);
+				}
+                if (j == 0)
+                {
+					addBottomFace(i, j, k, position, data);
+                }
+                if (j == CHUNK_HEIGHT - 1)
+				{
+                addTopFace(i, j, k, position, data);
+				}
+                if (k == 0)
+				{
+					addBackFace(i, j, k, position, data);
+				}
+                if (k == CHUNK_SIZE - 1)
+				{
+                    addFrontFace(i, j, k, position, data);
+				}
 
-                tex_coords.insert(tex_coords.end(), data->texCoords.begin(), data->texCoords.end());   
+                blocks[i][j][k] = data->id;
+
             }
         }
     }
@@ -95,6 +121,65 @@ Chunk::Chunk(glm::vec3 position) : position(position)
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(1);
 }
+
+void Chunk::addVertices(int x, int y, int z, float faceVertices[], glm::vec3 position )
+{
+    for (int i = 0; i < 18; i++)
+    {
+        if (i % 3 == 0)
+        {
+            this->vertices.push_back(faceVertices[i] + x + position.x);
+        }
+        else if (i % 3 == 1)
+        {
+            this->vertices.push_back(faceVertices[i] + y + position.y);
+        }
+        else 
+        {
+            this->vertices.push_back(faceVertices[i] + z + position.z);
+        }
+    }
+}
+
+
+void Chunk::addTopFace(int x, int y, int z, glm::vec3 chunkPosition, BlockData* data)
+{
+    addVertices(x, y, z, top_vertices, chunkPosition);
+
+    tex_coords.insert(tex_coords.end(), data->topFaceTexCoords.begin(), data->topFaceTexCoords.end());
+}
+
+void Chunk::addBottomFace(int x, int y, int z, glm::vec3 chunkPosition, BlockData* data)
+{
+    addVertices(x, y, z, bottom_vertices, chunkPosition);
+	tex_coords.insert(tex_coords.end(), data->bottomFaceTexCoords.begin(), data->bottomFaceTexCoords.end());
+}
+
+void Chunk::addFrontFace(int x, int y, int z, glm::vec3 chunkPosition, BlockData* data)
+{
+    addVertices(x, y, z, front_vertices, chunkPosition);
+    tex_coords.insert(tex_coords.end(), data->sideFaceTexCoords.begin(), data->sideFaceTexCoords.end());
+}
+
+void Chunk::addBackFace(int x, int y, int z, glm::vec3 chunkPosition, BlockData* data)
+{
+    addVertices(x, y, z, back_vertices, chunkPosition);
+    tex_coords.insert(tex_coords.end(), data->sideFaceTexCoords.begin(), data->sideFaceTexCoords.end());
+}
+
+void Chunk::addLeftFace(int x, int y, int z, glm::vec3 chunkPosition, BlockData* data)
+{
+
+    addVertices(x, y, z, left_vertices, chunkPosition);
+	tex_coords.insert(tex_coords.end(), data->sideFaceTexCoords.begin(), data->sideFaceTexCoords.end());
+}
+
+void Chunk::addRightFace(int x, int y, int z, glm::vec3 chunkPosition, BlockData* data)
+{
+    addVertices(x, y, z, right_vertices, chunkPosition);
+    tex_coords.insert(tex_coords.end(), data->sideFaceTexCoords.begin(), data->sideFaceTexCoords.end());
+}
+
 
 void Chunk::draw(Shader &shader)
 {
