@@ -14,6 +14,7 @@
 #include "Constants.h"
 #include "Controller.h"
 #include <GLFW/glfw3.h>
+#include "world/World.h"
 
 
 int main(int argc, char **argv)
@@ -29,6 +30,7 @@ int main(int argc, char **argv)
 	
 	GLFWwindow *window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Minecraft alpha 1.0", NULL, NULL);
 	
+
     if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -38,6 +40,7 @@ int main(int argc, char **argv)
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwMakeContextCurrent(window);
+glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height) { glViewport(0, 0, width, height); });
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -60,14 +63,10 @@ int main(int argc, char **argv)
     Camera* camera = Camera::getInstance();
     controller->setWindow(window);
 
-    Chunk chunk;
-    Chunk chunk2(glm::vec3(-16.0f, 0.0f, 0.0f));
-    Chunk chunk3(glm::vec3(0.0f, 0.0f, 16.0f));
-    Chunk chunk4(glm::vec3(-16.0f, 0.0f, 16.0f));
-
-    float time = glfwGetTime();
-
-	while (!glfwWindowShouldClose(window))
+	World world;
+	world.init();
+	
+  while (!glfwWindowShouldClose(window))
 	{
         float newTime = glfwGetTime();
         float deltaTime = newTime - time;
@@ -76,7 +75,8 @@ int main(int argc, char **argv)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.69f, 0.92f, 0.92f, 1.0f);
 
-        chunk.draw(shader);
+
+		    world.render(shader);
         camera->draw(shader);
 
         controller->tick();
