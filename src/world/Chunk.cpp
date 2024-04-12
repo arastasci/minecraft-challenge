@@ -11,6 +11,7 @@ float back_vertices[] =
     0.5f, 0.5f, -0.5f,
 };
 
+
 float front_vertices[] =
 {
         -0.5f, 0.5f, 0.5f,

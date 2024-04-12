@@ -10,8 +10,8 @@
 #include "BlockData.h"
 #include "BlockDatabase.h"
 
-#define CHUNK_SIZE 16
-#define CHUNK_HEIGHT 50
+#define CHUNK_SIZE 1
+#define CHUNK_HEIGHT 1
 
 class Chunk {
 public:

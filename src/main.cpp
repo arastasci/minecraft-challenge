@@ -65,17 +65,23 @@ glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int hei
 
 	World world;
 	world.init();
-	while (!glfwWindowShouldClose(window))
+	
+  while (!glfwWindowShouldClose(window))
 	{
+        float newTime = glfwGetTime();
+        float deltaTime = newTime - time;
+        time = newTime;
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.69f, 0.92f, 0.92f, 1.0f);
 
-		world.render(shader);
 
+		    world.render(shader);
         camera->draw(shader);
+
         controller->tick();
-        player->tick();       
-        
+        player->tick(deltaTime);       
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
