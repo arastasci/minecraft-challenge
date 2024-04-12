@@ -4,6 +4,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Camera.h"
 #include "Constants.h"
+#include "physics/BoundingBox.h"
+#include <iostream>
 
 class Player {
 
@@ -15,23 +17,30 @@ public:
 
 
     void tick(float deltaTime);
-    
-    void moveForward(float deltaTime);
-    void moveBackward(float deltaTime);
-    void moveLeft(float deltaTime);
-    void moveRight(float deltaTime);
+
+    void stop();
 
     void rotate(float pitch, float yaw);
     
-    private:
-    Player(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f));
-    static Player* instance;
-
     glm::vec3 position;
     glm::vec3 direction;
-    float speed = 1.0f;
+    glm::vec3 speed;
+
+    BoundingBox boundingBox;
+
+    bool movingForward = false;
+    bool movingBackward = false;
+    bool movingLeft = false;
+    bool movingRight = false;
+    
+    private:
+    Player(glm::vec3 position = glm::vec3(0.0f, 60.0f, 0.0f), glm::vec3 direction = glm::vec3(0.0f, 0.0f, -1.0f));
+    static Player* instance;
+    
+    //float speed = 5.0f;
     float sensitivity = 0.9f;
 
     float yaw = -90.0f;
     float pitch = 0.0f;
+
 };

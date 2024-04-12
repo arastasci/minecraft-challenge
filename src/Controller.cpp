@@ -57,17 +57,10 @@ void Controller::keyboard()
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
     
-    float delta = (glfwGetTime() - time);
-    time = glfwGetTime();
-    
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        player->moveForward(delta);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        player->moveBackward(delta);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        player->moveLeft(delta);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        player->moveRight(delta);
+    player->movingForward = glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS;
+    player->movingBackward = glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS;
+    player->movingLeft = glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS;
+    player->movingRight = glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS;
 }
 
 void Controller::tick()

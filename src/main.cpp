@@ -77,13 +77,22 @@ glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int hei
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.69f, 0.92f, 0.92f, 1.0f);
 
-
-		    world.render(shader);
-        camera->draw(shader);
-
-        controller->tick();
         player->tick(deltaTime);       
+		world.tick(deltaTime);
+        controller->tick();
 
+		world.render(shader);
+        camera->draw(shader);
+		
+		player->position += player->speed * deltaTime;
+		
+		player->boundingBox.x = player->position.x + PLAYER_SIZE.x / 2.0f;
+		player->boundingBox.y = player->position.y - (PLAYER_SIZE).y / 2.0f ;
+		player->boundingBox.z = player->position.z + PLAYER_SIZE.z / 2.0f;
+		
+		camera->position = player->position;
+		camera->direction = player->direction;
+		
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

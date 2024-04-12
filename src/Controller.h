@@ -10,7 +10,6 @@ public:
     static Controller* getInstance();
     void operator=(const Controller &) = delete;
 
-
     void setWindow(GLFWwindow* window);
 
     void tick();

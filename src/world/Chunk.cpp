@@ -64,16 +64,38 @@ float top_vertices[] =
 };
 
 
-Chunk::Chunk(glm::vec3 position) : position(position)
+Chunk::Chunk(glm::vec2 indices, int height) : position( CHUNK_SIZE * indices.x, 0.0f, CHUNK_SIZE * indices.y), chunkIndices(indices)
+    // boundingBox(glm::vec3(position.x, -100000, position.z), glm::vec3(CHUNK_SIZE, 10000000000, CHUNK_SIZE))
 {
-
     BlockDatabase db;
-    BlockData *data = db.blockDatabase[1];
+    BlockData *grassData = db.blockDatabase[1];
+    BlockData * stoneData = db.blockDatabase[3];
+    BlockData * dirtData = db.blockDatabase[2];
 
+    boundingBox = BoundingBox(glm::vec3(position.x, -100000, position.z), glm::vec3(CHUNK_SIZE, 10000000000, CHUNK_SIZE));
+    
+    std::cout << "Chunk created at: " << position.x << " " << position.z << std::endl;
+    std::cout << "Bounding box of chunk" << chunkIndices.x << chunkIndices.y << ": " << boundingBox.x << " " << boundingBox.y << " " << boundingBox.z << std::endl;
+    this->height = height;
+    
     for (int i = 0; i < CHUNK_SIZE; i++)
     {
-        for (int j = 0; j < CHUNK_HEIGHT; j++)
+        for (int j = 0; j < height; j++)
         {
+            BlockData *data = nullptr;
+
+                if(j < 20)
+                {
+                    data = stoneData;
+                }
+                else if(j != height - 1)
+                {
+                    data = dirtData;
+                }
+                else
+                {
+                    data = grassData;
+                }
             for (int k = 0; k < CHUNK_SIZE; k++)
             {
                 if (i == 0)
@@ -88,7 +110,7 @@ Chunk::Chunk(glm::vec3 position) : position(position)
                 {
 					addBottomFace(i, j, k, data);
                 }
-                if (j == CHUNK_HEIGHT - 1)
+                if (j == height - 1)
 				{
                 addTopFace(i, j, k, data);
 				}
@@ -181,7 +203,6 @@ void Chunk::addRightFace(int x, int y, int z, BlockData* data)
     tex_coords.insert(tex_coords.end(), data->sideFaceTexCoords.begin(), data->sideFaceTexCoords.end());
 }
 
-
 void Chunk::draw(Shader &shader)
 {
     glm::mat4 model = glm::mat4(1.0f);
@@ -192,4 +213,54 @@ void Chunk::draw(Shader &shader)
     // glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0); // 36 vertices (6 faces * 2 triangles per face * 3 vertices per triangle
     glDrawArrays(GL_TRIANGLES, 0, 36 * CHUNK_SIZE * CHUNK_SIZE * CHUNK_HEIGHT); // 36 vertices (6 faces * 2 triangles per face * 3 vertices per triangle
     glBindVertexArray(0);
+}
+
+void::Chunk::handleCollisions(float deltaTime)
+{
+    Player *player = Player::getInstance();
+
+    for(int i = 0; i < CHUNK_SIZE; i++)
+    {
+        for(int j = 0; j < height; j++)
+        {
+            for(int k = 0; k < CHUNK_SIZE; k++)
+            {
+                if(blocks[i][j][k] != BlockId::Air)
+                {
+                    BoundingBox block(glm::vec3(i + position.x, j + position.y, k + position.z), glm::vec3(1.0f, 1.0f, 1.0f));
+                    
+                    BoundingBox prediction = player->boundingBox;
+                    prediction.x += player->speed.x * deltaTime;
+                    prediction.y += player->speed.y * deltaTime;
+                    prediction.z += player->speed.z * deltaTime;
+
+                    if(prediction.intersects(block))
+                    {
+                        std::cout << "Collision detected" << i << j << k << std::endl;
+
+                        BoundingBox predictionX = player->boundingBox;
+                        predictionX.x += player->speed.x * deltaTime;
+                        if(predictionX.intersects(block))
+                        {
+                            player->speed.x = 0.0f;
+                        }
+
+                        BoundingBox predictionY = player->boundingBox;
+                        predictionY.y += player->speed.y * deltaTime;
+                        if(predictionY.intersects(block))
+                        {
+                            player->speed.y = 0.0f;
+                        }
+
+                        BoundingBox predictionZ = player->boundingBox;
+                        predictionZ.z += player->speed.z * deltaTime;
+                        if(predictionZ.intersects(block))
+                        {
+                            player->speed.z = 0.0f;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

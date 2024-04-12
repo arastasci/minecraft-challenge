@@ -1,6 +1,8 @@
 #include "Player.h"
 
-Player::Player(glm::vec3 position) : position(position) {}
+Player::Player(glm::vec3 position, glm::vec3 direction) : position(position), direction(direction),
+                                    boundingBox(position, PLAYER_SIZE)
+{}
 
 Player* Player::getInstance() {
     if(instance == nullptr) {
@@ -13,30 +15,31 @@ Player* Player::instance = nullptr;
 
 void Player::tick(float deltaTime) {
     // Gravity
-    position -= glm::vec3(0.0f, GRAVITY_SPEED * deltaTime, 0.0f);
+    //position -= glm::vec3(0.0f, GRAVITY_SPEED * deltaTime, 0.0f);
 
     // Update player position
-    Camera *camera = Camera::getInstance();
+    speed = glm::vec3(0.0f);
 
-    camera->position = position;
-    camera->direction = direction;
+    if(movingForward) {
+        speed += glm::normalize(direction);
+    }
+    if(movingBackward) {
+        speed -= glm::normalize(direction);
+    }
+    if(movingLeft) {
+        speed -= glm::normalize(glm::cross(direction, glm::vec3(0.0f, 1.0f, 0.0f)))  ;
+    }
+    if(movingRight) {
+        speed += glm::normalize(glm::cross(direction, glm::vec3(0.0f, 1.0f, 0.0f))) ;
+    }
+
+    if(speed != glm::vec3(0.0f))
+        speed = glm::normalize(speed) * PLAYER_SPEED;
+
+    //speed.y -= GRAVITY_SPEED;
+
 }
 
-void Player::moveForward(float deltaTime) {
-    position += direction * speed * deltaTime;    
-}
-
-void Player::moveBackward(float deltaTime) {
-    position -= direction * speed * deltaTime;
-}
-
-void Player::moveLeft(float deltaTime) {
-    position -= glm::normalize(glm::cross(direction, glm::vec3(0.0f, 1.0f, 0.0f))) * speed * deltaTime;
-}
-
-void Player::moveRight(float deltaTime ) {
-    position += glm::normalize(glm::cross(direction, glm::vec3(0.0f, 1.0f, 0.0f))) * speed * deltaTime;
-}
 
 void Player::rotate(float xoffset, float yoffset) {
     // Update player rotation
@@ -56,4 +59,6 @@ void Player::rotate(float xoffset, float yoffset) {
     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     
     direction = glm::normalize(direction);
+
+    std::cout << direction.x << direction.y << direction.z << std::endl;
 }

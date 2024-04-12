@@ -16,7 +16,7 @@ Camera::Camera()
 void Camera::draw(Shader& shader)
 {
     glm::mat4 view = glm::lookAt(position, position + direction, up);
-    view = glm::scale(view, glm::vec3(0.1f));
+    view = glm::scale(view, glm::vec3(1.0f));
 
     shader.setMat4("view", view);
     shader.setMat4("projection", projection);
