@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Camera.h"
+#include "Constants.h"
 
 class Player {
 
@@ -13,7 +14,7 @@ public:
     void operator=(const Player &) = delete;
 
 
-    void tick();
+    void tick(float deltaTime);
     
     void moveForward(float deltaTime);
     void moveBackward(float deltaTime);

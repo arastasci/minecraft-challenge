@@ -65,17 +65,23 @@ int main(int argc, char **argv)
     Chunk chunk3(glm::vec3(0.0f, 0.0f, 16.0f));
     Chunk chunk4(glm::vec3(-16.0f, 0.0f, 16.0f));
 
+    float time = glfwGetTime();
+
 	while (!glfwWindowShouldClose(window))
 	{
+        float newTime = glfwGetTime();
+        float deltaTime = newTime - time;
+        time = newTime;
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.69f, 0.92f, 0.92f, 1.0f);
 
         chunk.draw(shader);
-
         camera->draw(shader);
+
         controller->tick();
-        player->tick();       
-        
+        player->tick(deltaTime);       
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

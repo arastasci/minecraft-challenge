@@ -11,7 +11,10 @@ Player* Player::getInstance() {
 
 Player* Player::instance = nullptr;
 
-void Player::tick() {
+void Player::tick(float deltaTime) {
+    // Gravity
+    position -= glm::vec3(0.0f, GRAVITY_SPEED * deltaTime, 0.0f);
+
     // Update player position
     Camera *camera = Camera::getInstance();
 
