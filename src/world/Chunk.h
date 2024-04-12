@@ -21,15 +21,14 @@ public:
     void draw(Shader& shader);
 private:
 
-    void addFace(glm::vec3 chunkPosition, glm::vec3 blockPosition, BlockData* data);
-    void addTopFace(int x, int y, int z, glm::vec3 chunkPosition,  BlockData* blockId);
-    void addBottomFace(int x, int y, int z, glm::vec3 chunkPosition, BlockData* blockId);
-    void addFrontFace(int x, int y, int z, glm::vec3 chunkPosition, BlockData* blockId);
-    void addBackFace(int x, int y, int z, glm::vec3 chunkPosition, BlockData* blockId);
-    void addLeftFace(int x, int y, int z, glm::vec3 chunkPosition, BlockData* blockId);
-    void addRightFace(int x, int y, int z, glm::vec3 chunkPosition, BlockData* blockId);
+    void addTopFace(int x, int y, int z,  BlockData* blockId);
+    void addBottomFace(int x, int y, int z, BlockData* blockId);
+    void addFrontFace(int x, int y, int z, BlockData* blockId);
+    void addBackFace(int x, int y, int z, BlockData* blockId);
+    void addLeftFace(int x, int y, int z, BlockData* blockId);
+    void addRightFace(int x, int y, int z, BlockData* blockId);
 
-    void addVertices(int x, int y, int z, float faceVertices[], glm::vec3 chunkPosition );
+    void addVertices(int x, int y, int z, float faceVertices[] );
 
     glm::vec3 position;
     std::vector<float> vertices;

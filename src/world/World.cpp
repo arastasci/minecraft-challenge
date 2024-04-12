@@ -2,11 +2,11 @@
 
 void World::init()
 {
-	for (int i = -4; i < 4; i++)
+	for (int i = -4; i < CHUNK_COUNT; i++)
 	{
-		for (int j = -4; j < 4; j++)
+		for (int j = -4; j < CHUNK_COUNT; j++)
 		{
-			chunks.push_back(new Chunk(glm::vec3(i * 16.0f, 0.0f, j * 16.0f)));
+			chunks.push_back(new Chunk(glm::vec3(i * 16.0f, -50.0f, j * 16.0f)));
 		}
 	}
 }

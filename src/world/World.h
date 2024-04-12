@@ -2,6 +2,10 @@
 #include <vector>
 #include "Chunk.h"
 #include "../Shader.h"
+
+#define CHUNK_COUNT 4
+
+
 class World 
 {
 public:
