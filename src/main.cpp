@@ -65,6 +65,8 @@ glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int hei
 
 	World world;
 	world.init();
+
+	float time = glfwGetTime();
 	
   while (!glfwWindowShouldClose(window))
 	{
