@@ -32,6 +32,9 @@ public:
     bool movingBackward = false;
     bool movingLeft = false;
     bool movingRight = false;
+    bool jumping = false;
+
+    bool isOnGround = false;
     
     private:
     Player(glm::vec3 position = glm::vec3(0.0f, 60.0f, 0.0f), glm::vec3 direction = glm::vec3(0.0f, 0.0f, -1.0f));

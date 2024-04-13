@@ -249,6 +249,10 @@ void::Chunk::handleCollisions(float deltaTime)
                         predictionY.y += player->speed.y * deltaTime;
                         if(predictionY.intersects(block))
                         {
+                            if(player->speed.y <= 0.0f)
+                            {
+                                player->isOnGround = true;
+                            }
                             player->speed.y = 0.0f;
                         }
 

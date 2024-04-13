@@ -91,8 +91,10 @@ glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int hei
 		player->boundingBox.z = player->position.z + PLAYER_SIZE.z / 2.0f;
 		
 		camera->position = player->position;
+		camera->position.y += (PLAYER_SIZE).y / 2.0f;
 		camera->direction = player->direction;
 		
+		std::cout << player->isOnGround << std::endl;
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

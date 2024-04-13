@@ -14,8 +14,6 @@ Player* Player::getInstance() {
 Player* Player::instance = nullptr;
 
 void Player::tick(float deltaTime) {
-    // Gravity
-    //position -= glm::vec3(0.0f, GRAVITY_SPEED * deltaTime, 0.0f);
 
     // Update player position
     speed = glm::vec3(0.0f);
@@ -36,8 +34,12 @@ void Player::tick(float deltaTime) {
     if(speed != glm::vec3(0.0f))
         speed = glm::normalize(speed) * PLAYER_SPEED;
 
-    //speed.y -= GRAVITY_SPEED;
+    if(isOnGround && jumping) {
+        speed.y += JUMP_SPEED;
+    }
 
+    isOnGround = false;
+    speed.y -= GRAVITY_SPEED;
 }
 
 

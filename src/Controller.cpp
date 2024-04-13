@@ -61,6 +61,7 @@ void Controller::keyboard()
     player->movingBackward = glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS;
     player->movingLeft = glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS;
     player->movingRight = glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS;
+    player->jumping = glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS;
 }
 
 void Controller::tick()
