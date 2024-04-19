@@ -25,6 +25,7 @@ public:
     glm::vec3 position;
     glm::vec3 direction;
     glm::vec3 speed;
+    glm::vec3 acceleration;
 
     BoundingBox boundingBox;
 
@@ -33,7 +34,6 @@ public:
     bool movingLeft = false;
     bool movingRight = false;
     bool jumping = false;
-
     bool isOnGround = false;
     
     private:

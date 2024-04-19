@@ -16,30 +16,36 @@ Player* Player::instance = nullptr;
 void Player::tick(float deltaTime) {
 
     // Update player position
-    speed = glm::vec3(0.0f);
+    acceleration = glm::vec3(0.0f);
 
     if(movingForward) {
-        speed += glm::normalize(direction);
+        acceleration += glm::normalize(glm::vec3(direction.x, 0.0f, direction.z));
     }
     if(movingBackward) {
-        speed -= glm::normalize(direction);
+        acceleration -= glm::normalize(glm::vec3(direction.x, 0.0f, direction.z));
     }
     if(movingLeft) {
-        speed -= glm::normalize(glm::cross(direction, glm::vec3(0.0f, 1.0f, 0.0f)))  ;
+        acceleration -= glm::normalize(glm::cross(direction, glm::vec3(0.0f, 1.0f, 0.0f)))  ;
     }
     if(movingRight) {
-        speed += glm::normalize(glm::cross(direction, glm::vec3(0.0f, 1.0f, 0.0f))) ;
+        acceleration += glm::normalize(glm::cross(direction, glm::vec3(0.0f, 1.0f, 0.0f))) ;
+    }
+    if(acceleration != glm::vec3(0.0f))
+        acceleration = glm::normalize(acceleration) * PLAYER_SPEED;
+
+    if(isOnGround && jumping){
+        isOnGround = false;
+        acceleration.y += JUMP_SPEED;
     }
 
-    if(speed != glm::vec3(0.0f))
-        speed = glm::normalize(speed) * PLAYER_SPEED;
+    acceleration.y -= GRAVITY_SPEED;
 
-    if(isOnGround && jumping) {
-        speed.y += JUMP_SPEED;
-    }
+    speed.x = speed.x * 0.9f + (acceleration.x * deltaTime);
+    speed.y = speed.y * 0.9f + (acceleration.y * deltaTime);
+    speed.z = speed.z * 0.9f + (acceleration.z * deltaTime);
 
-    isOnGround = false;
-    speed.y -= GRAVITY_SPEED;
+    if(speed.y > 100.0f)
+        speed.y = 100.0f;
 }
 
 
